@@ -37,15 +37,12 @@
           label="所在地区"
           :rules="[{ required: true, errorMessage: '请选择省/市/区(县)' }]"
         >
-          <picker
-            class="picker"
-            @change="onRegionChange"
-            mode="region"
-            :value="addressData.bigAddress.split(' ')"
-          >
-            <view v-if="addressData.bigAddress">{{ addressData.bigAddress }}</view>
-            <view v-else class="placeholder">请选择省/市/区(县)</view>
-          </picker>
+          <view>
+            <pick-regions :defaultRegion="defaultRegionCode" @getRegion="handleGetRegion">
+              <div v-if="!addressData.bigAddress">请选择省/市/区(县)</div>
+              <div v-else>{{ addressData.bigAddress }}</div>
+            </pick-regions>
+          </view>
         </uni-forms-item>
         <uni-forms-item
           name="fullAddress"
@@ -87,6 +84,7 @@ import {
 import { useMemberStore } from '@/stores/modules/member'
 import { onLoad } from '@dcloudio/uni-app'
 import { useAddressStore } from '@/stores/modules/address'
+import pickRegions from '@/components/pick-regions/pick-regions.vue'
 const addressStore = useAddressStore()
 const memberStore = useMemberStore()
 const user_id = computed(() => memberStore.profile.user_id)
@@ -96,7 +94,10 @@ const query = defineProps({
 })
 // 动态设置标题
 uni.setNavigationBarTitle({ title: query.address_id ? '修改地址' : '新建地址' })
-
+// 设置选中器默认地址
+// const defaultRegion = ['广东省', '广州市', '番禺区']
+const region = ref([])
+const defaultRegionCode = '440113'
 const addressData = ref({
   receiver: '',
   phone: '',
@@ -111,13 +112,14 @@ const address_id = computed(() => {
 const defaultAddressId = computed(() => addressStore.defaultAddress.address_id)
 
 const getAddressById = async () => {
-  await getAddressByIdAPI(user_id.value, address_id.value).then((res) => {
+  await getAddressByIdAPI(user_id.value, parseInt(address_id.value)).then((res) => {
     // 把数据合并到表单中
     Object.assign(addressData.value, res.result)
   })
 }
-const onRegionChange = (e) => {
-  addressData.value.bigAddress = `${e.detail.value[0]} ${e.detail.value[1]} ${e.detail.value[2]}`
+const handleGetRegion = (val) => {
+  region.value = val
+  addressData.value.bigAddress = region.value.map((item) => item.name).join(' ')
 }
 const onSwitchChange = (e) => {
   addressData.value.isDefault = e.detail.value ? 1 : 0
@@ -234,7 +236,7 @@ onLoad(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background-color: #f7f7f7;
 }

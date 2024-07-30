@@ -4,7 +4,11 @@
   </view>
   <view class="forms">
     <uni-forms :modelValue="formData" :rules="rules" ref="form">
-      <uni-forms-item name="account" :rules="[{ required: true, errorMessage: '请输入账号' }]">
+      <uni-forms-item
+        name="account"
+        :rules="[{ required: true, errorMessage: '请输入账号' }]"
+        class="itemInput"
+      >
         <uni-easyinput
           type="number"
           v-model="formData.account"
@@ -13,7 +17,11 @@
           :inputBorder="false"
         ></uni-easyinput>
       </uni-forms-item>
-      <uni-forms-item name="password" :rules="[{ required: true, errorMessage: '请输入密码' }]">
+      <uni-forms-item
+        name="password"
+        :rules="[{ required: true, errorMessage: '请输入密码' }]"
+        class="itemInput"
+      >
         <uni-easyinput
           type="password"
           v-model="formData.password"
@@ -118,7 +126,7 @@ const submitForm = () => {
               uni.showToast({ title: '登录成功', icon: 'success', duration: 2000 })
               setTimeout(() => {
                 // 页面跳转
-                uni.navigateBack()
+                uni.switchTab({ url: '/pages/my/my' })
               }, 500)
             } else {
               uni.showToast({
@@ -153,7 +161,7 @@ const clearForm = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background: linear-gradient(
     to bottom,
@@ -165,6 +173,7 @@ page {
     rgba(247, 248, 247, 0.1)
   );
 }
+
 .content {
   text-align: center;
   .title {
@@ -177,6 +186,7 @@ page {
   margin-top: 20%;
   text-align: center;
 }
+
 .uni-easyinput {
   .uni-easyinput__content {
     background: white;

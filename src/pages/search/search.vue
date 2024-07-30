@@ -74,7 +74,7 @@ onShow(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   height: 100%;
   background-color: #f4f2f2;

@@ -91,7 +91,7 @@ onLoad(async () => {
   </scroll-view>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   height: 100%;
   display: flex;

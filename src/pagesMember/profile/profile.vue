@@ -36,7 +36,7 @@
           name="gender"
           :rules="[{ required: true, errorMessage: '请选中性别' }]"
         >
-          <radio-group @change="onGenderChange" style="margin-left: 50px">
+          <radio-group @change="onGenderChange">
             <label class="radio">
               <radio value="男" color="#27ba9b" :checked="profileData?.gender === '男'" />
               男
@@ -97,10 +97,12 @@
           :rules="[{ required: true, errorMessage: '请选择城市' }]"
         >
           <view class="timePicker">
-            <picker class="picker" mode="region" @change="onChangeLocation" :value="loactionList">
-              <view v-if="profileData?.address">{{ profileData.address }}</view>
-              <view class="placeholder" v-else>请选择城市</view>
-            </picker>
+            <view>
+              <pick-regions :defaultRegion="defaultRegionCode" @getRegion="handleGetRegion">
+                <div v-if="!profileData.address">请选择所在城市</div>
+                <div v-else>{{ profileData.address }}</div>
+              </pick-regions>
+            </view>
           </view>
         </uni-forms-item>
       </uni-forms>
@@ -114,10 +116,14 @@ import { useMemberStore } from '@/stores/modules/member'
 import { computed, ref } from 'vue'
 import { getUserByIdAPI, updateUserBaseInfoAPI } from '@/apis/user'
 import { onLoad } from '@dcloudio/uni-app'
+import pickRegions from '@/components/pick-regions/pick-regions.vue'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const memberStore = useMemberStore()
 const form = ref(null)
+// 设置选中器默认地址
+// const defaultRegion = ['广东省', '广州市', '番禺区']
+const defaultRegionCode = '440113'
 const profileData = ref({
   name: '',
   phone: '',
@@ -146,9 +152,9 @@ const onChangeBirthday = (ev) => {
   profileData.value.formattedBirthday = ev.detail.value
 }
 // 获取城市
-const onChangeLocation = (ev) => {
-  loactionList.value = ev.detail.value
-  profileData.value.address = `${loactionList.value[0]} ${loactionList.value[1]} ${loactionList.value[2]}`
+const handleGetRegion = (val) => {
+  loactionList.value = val
+  profileData.value.address = loactionList.value.map((item) => item.name).join(' ')
 }
 const onTapAwatar = async () => {
   // / 调用拍照/选择图片
@@ -212,7 +218,7 @@ onLoad(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background-color: #f7f7f7;
   height: 100%;
@@ -300,7 +306,6 @@ page {
 }
 .timePicker {
   margin-top: 8px;
-  margin-left: 50px;
   border: 1px solid #f7f5f5;
   border-radius: 10px;
   font-size: 14px;

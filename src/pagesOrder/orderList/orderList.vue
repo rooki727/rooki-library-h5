@@ -19,21 +19,21 @@
     </view>
     <!-- 订单列表 -->
     <template v-if="orderList.length > 0">
-      <navigator
-        :url="`/pagesOrder/orderDetail/orderDetail?order_id=${item.order.order_id}`"
-        open-type="navigate"
-        hover-class="none"
-        class="orderListContent"
-        v-for="(item, index) in orderList"
-        :key="index"
-      >
+      <view class="orderListContent" v-for="(item, index) in orderList" :key="index">
         <!-- 上部分时间 -->
         <view class="contentTop">
           <view>{{ item.order.buildTime }}</view>
           <view>{{ item.order.order_status }}</view>
         </view>
         <!-- 内容部分 -->
-        <view class="orderListItem" v-for="book in item.orderDetailList" :key="book.book_id">
+        <navigator
+          class="orderListItem"
+          :url="`/pagesOrder/orderDetail/orderDetail?order_id=${item.order.order_id}`"
+          open-type="navigate"
+          hover-class="none"
+          v-for="book in item.orderDetailList"
+          :key="book.book_id"
+        >
           <view class="orderListItemImg"
             ><image class="ItemImg" :src="book.main_picture" mode="aspectFit"> </image
           ></view>
@@ -42,7 +42,7 @@
             <view class="orderListItemSpec">规格</view>
           </view>
           <view class="orderListItemCount"> x{{ book.detail_number }} </view>
-        </view>
+        </navigator>
         <!-- 总计数量和金额 -->
         <view class="orderListTotalPart">
           <view class="orderListTotal"
@@ -91,7 +91,7 @@
             >删除订单</view
           >
         </view>
-      </navigator>
+      </view>
 
       <!-- 底部提示文字 -->
       <view class="loading-text" :style="{ paddingBottom: safeAreaInsetsBottom + 'px' }">
@@ -116,9 +116,9 @@
   </scroll-view>
 </template>
 
-<script setup>
+<script setup scoped>
 import { computed, ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onShow } from '@dcloudio/uni-app'
 import {
   getOrderBookListByStatusAPI,
   findCountStatusAPI,
@@ -135,9 +135,11 @@ const way = 'again'
 const user_id = computed(() => memberStore.profile.user_id)
 const query = defineProps({
   type: Number,
+  status: Number,
 })
-const type = computed(() => query.type)
-
+const type = computed(() => parseInt(query.type))
+const status = computed(() => query.status)
+const currentStatus = ref('')
 const currentType = ref(0)
 const orderTitle = [
   { type: 0, name: '全部' },
@@ -153,14 +155,10 @@ const pageSize = ref(4)
 const finish = ref(false)
 const statusCountList = ref([])
 
-// 计算属性得到状态
-const order_status = computed(
-  () => orderTitle.find((item) => item.type === currentType.value)?.name,
-)
-
 const takeOrderType = async () => {
   if (type.value != null) {
     currentType.value = type.value
+    currentStatus.value = status.value
     getOrderList()
   }
 }
@@ -180,7 +178,7 @@ const getOrderList = async () => {
   // 设置loading
   loading.value = true
   const res = await getOrderBookListByStatusAPI(
-    order_status.value,
+    currentStatus.value,
     user_id.value,
     page.value,
     pageSize.value,
@@ -188,7 +186,7 @@ const getOrderList = async () => {
   orderList.value.push(...res.result)
   loading.value = false
   const totalCount = computed(
-    () => statusCountList.value.find((item) => item.status === order_status.value)?.count,
+    () => statusCountList.value.find((item) => item.status === currentStatus.value)?.count,
   )
   const orderTotalPage = computed(() => Math.ceil(totalCount.value / pageSize.value))
   if (page.value < orderTotalPage.value) {
@@ -203,6 +201,12 @@ const onScrolltolower = () => {
 }
 const onTapTab = (type) => {
   currentType.value = type
+  // 计算属性得到状态
+  const order_status = computed(
+    () => orderTitle.find((item) => item.type === currentType.value)?.name,
+  )
+
+  currentStatus.value = order_status.value
   // 初始化数据后再加载
   resetData()
   getOrderList()
@@ -239,7 +243,7 @@ const onOrderDete = (item) => {
     content: '确认删除订单',
     success: async (success) => {
       if (success.confirm) {
-        await deleteMemberOrderAPI(item.order.order_id)
+        await deleteMemberOrderAPI(parseInt(item.order.order_id))
         // 重新加载
         resetData()
         getOrderList()
@@ -247,7 +251,7 @@ const onOrderDete = (item) => {
     },
   })
 }
-onLoad(async () => {
+onShow(async () => {
   await findCountStatus().then(() => {
     takeOrderType()
   })

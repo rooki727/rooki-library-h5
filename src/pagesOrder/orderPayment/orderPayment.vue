@@ -63,7 +63,7 @@ const onScrolltolower = () => {
 }
 const order_id = computed(() => query.order_id)
 const getOrderList = async () => {
-  await getOrderDetailsWithBooksAPI(order_id.value).then((res) => {
+  await getOrderDetailsWithBooksAPI(parseInt(order_id.value)).then((res) => {
     orderList.value = res.result?.orderDetailList
     order.value = res.result?.order
   })
@@ -73,7 +73,7 @@ onLoad(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   display: flex;
   flex-direction: column;

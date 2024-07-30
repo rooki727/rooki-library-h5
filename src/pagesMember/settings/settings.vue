@@ -78,7 +78,7 @@ const outLogin = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background-color: #f7f7f7;
   display: flex;

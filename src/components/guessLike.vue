@@ -14,7 +14,7 @@ import { ref, onMounted } from 'vue'
 import { getHomeGoodsGuessLikeAPI } from '@/apis/home'
 import bookItem from './bookItem.vue'
 const page = ref(1)
-const pageSize = ref(4)
+const pageSize = ref(6)
 const guessLikeList = ref([])
 const finish = ref(false)
 const getHomeGoodsGuessLike = async () => {

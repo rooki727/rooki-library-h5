@@ -12,15 +12,14 @@
                 <view class="addressPhone">{{ item.phone }}</view>
                 <view class="moren" v-show="item.isDefault === 1">默认</view></view
               >
-              <navigator
-                :url="`/pagesMember/optionAddress/optionAddress?address_id=${item.address_id}`"
-                open-type="navigate"
-                hover-class="none"
-                @tap.stop="() => {}"
-              >
-                <view class="editIcon"> <uni-icons type="compose" size="20"></uni-icons> </view
-              ></navigator>
             </view>
+            <navigator
+              :url="`/pagesMember/optionAddress/optionAddress?address_id=${item.address_id}`"
+              open-type="navigate"
+              hover-class="none"
+            >
+              <view class="editIcon"> <uni-icons type="compose" size="20"></uni-icons> </view
+            ></navigator>
           </view>
           <!-- 右侧插槽 -->
           <template #right>
@@ -98,7 +97,7 @@ onShow(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background-color: #f7f7f7;
 }

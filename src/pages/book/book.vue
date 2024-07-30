@@ -235,7 +235,7 @@ const refresh = (val) => {
   }
 }
 const getBookById = () => {
-  getBookByIdAPI(book_id.value).then((res) => {
+  getBookByIdAPI(parseInt(book_id.value)).then((res) => {
     book.value = res.result
     pictureList.value = res.result.pictureList
   })
@@ -327,7 +327,7 @@ onShow(async () => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   height: 100%;
   display: flex;
@@ -463,9 +463,11 @@ page {
   /* #endif */
   bottom: 0;
 }
-.uni-tab__cart-sub-left {
-  .uni-icons {
-    color: rgb(255, 94, 0) !important;
-  }
+
+.uni-icons {
+  color: rgb(255, 94, 0) !important;
+}
+.uni-tab__text {
+  color: rgb(255, 94, 0) !important;
 }
 </style>

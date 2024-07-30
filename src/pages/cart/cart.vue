@@ -103,7 +103,7 @@
           ></view>
           <view class="all-checked-text">全选</view></view
         >
-        <view>
+        <view class="totalCountMoney">
           <text class="total-text">合计:</text>
           <text class="total-money">￥{{ selectedCartListMoney }}</text></view
         >
@@ -253,6 +253,7 @@ const getAddressListById = async () => {
 // 加载更多
 const guessLikeRef = ref(null)
 const onScrolltolower = () => {
+  console.log(1)
   guessLikeRef.value.getMore()
 }
 
@@ -310,7 +311,7 @@ onShow(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background-color: #f7f7f7;
   height: 100%;
@@ -336,7 +337,10 @@ page {
     margin-left: 5px;
   }
 }
-
+.cartList {
+  margin-top: 5px;
+  min-height: 30vh;
+}
 .checked {
   background-color: orangered;
 }
@@ -346,9 +350,7 @@ page {
   height: 120px;
   display: flex;
   position: relative;
-  .cartList {
-    margin-top: 5px;
-  }
+
   .cart-checked {
     margin-top: 45px;
     height: 18px;
@@ -469,7 +471,7 @@ page {
   height: 60px;
   background-color: white;
   border-bottom: 1rpx solid #a9a7a7;
-  padding-bottom: 2px;
+  padding-bottom: 53px;
   display: flex;
   line-height: 60px;
   justify-content: space-between;
@@ -487,14 +489,18 @@ page {
       line-height: 18px;
       border-radius: 50%;
       border: 1px solid #dcd4d4;
+      color: white;
     }
     .all-checked-text {
       font-size: 15px;
-      color: rgb(145, 143, 143);
+      color: rgb(139, 134, 134);
     }
     .checked {
       background-color: orangered;
     }
+  }
+  totalCountMoney {
+    order: 2;
   }
   .total-text {
     font-size: 14px;
@@ -505,6 +511,7 @@ page {
     color: orangered;
   }
   .payment-button {
+    order: 3;
     overflow: hidden;
     margin-top: 10px;
     height: 40px;

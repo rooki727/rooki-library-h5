@@ -20,7 +20,7 @@
     :enable-back-to-top="true"
   >
     <!-- 订单状态 -->
-    <view class="overview" :style="{ paddingTop: safeAreaInsetsTop + 'px' }">
+    <view class="overview">
       <!-- 待付款状态:展示去支付按钮和倒计时 -->
       <template v-if="order.order_status === '待付款'">
         <view class="status"
@@ -235,7 +235,7 @@ import {
   updateDaiPingJiaAPI,
   findLogisticsListAPI,
 } from '@/apis/order'
-import { onLoad, onReady } from '@dcloudio/uni-app'
+import { onLoad } from '@dcloudio/uni-app'
 import guessLike from '@/components/guessLike.vue'
 const query = defineProps({
   order_id: Number,
@@ -243,37 +243,37 @@ const query = defineProps({
 const order_id = computed(() => query.order_id)
 
 const pages = getCurrentPages()
-// 获取当前页面实例，数组最后一项
-const pageInstance = pages.at(-1)
-// 页面渲染完毕，绑定动画效果
-onReady(() => {
-  // 动画效果,导航栏背景色
-  pageInstance.animate(
-    '.navbar', // 选择器
-    [{ backgroundColor: 'transparent' }, { backgroundColor: '#f8f8f8' }], // 关键帧信息
-    1000, // 动画持续时长
-    {
-      scrollSource: '#scroller', // scroll-view 的选择器
-      startScrollOffset: 0, // 开始滚动偏移量
-      endScrollOffset: 50, // 停止滚动偏移量
-      timeRange: 1000, // 时间长度
-    },
-  )
-  // 动画效果,导航栏标题
-  pageInstance.animate('.navbar .title', [{ color: 'transparent' }, { color: '#000' }], 1000, {
-    scrollSource: '#scroller',
-    timeRange: 1000,
-    startScrollOffset: 0,
-    endScrollOffset: 50,
-  })
-  // 动画效果,导航栏返回按钮
-  pageInstance.animate('.navbar .back', [{ color: '#fff' }, { color: '#000' }], 1000, {
-    scrollSource: '#scroller',
-    timeRange: 1000,
-    startScrollOffset: 0,
-    endScrollOffset: 50,
-  })
-})
+// // 获取当前页面实例，数组最后一项
+// const pageInstance = pages.at(-1)
+// // 页面渲染完毕，绑定动画效果
+// onReady(() => {
+//   // 动画效果,导航栏背景色
+//   pageInstance.animate(
+//     '.navbar', // 选择器
+//     [{ backgroundColor: 'transparent' }, { backgroundColor: '#f8f8f8' }], // 关键帧信息
+//     1000, // 动画持续时长
+//     {
+//       scrollSource: '#scroller', // scroll-view 的选择器
+//       startScrollOffset: 0, // 开始滚动偏移量
+//       endScrollOffset: 50, // 停止滚动偏移量
+//       timeRange: 1000, // 时间长度
+//     },
+//   )
+//   // 动画效果,导航栏标题
+//   pageInstance.animate('.navbar .title', [{ color: 'transparent' }, { color: '#000' }], 1000, {
+//     scrollSource: '#scroller',
+//     timeRange: 1000,
+//     startScrollOffset: 0,
+//     endScrollOffset: 50,
+//   })
+//   // 动画效果,导航栏返回按钮
+//   pageInstance.animate('.navbar .back', [{ color: '#fff' }, { color: '#000' }], 1000, {
+//     scrollSource: '#scroller',
+//     timeRange: 1000,
+//     startScrollOffset: 0,
+//     endScrollOffset: 50,
+//   })
+// })
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const safeAreaInsetsTop = safeAreaInsets.top
@@ -308,7 +308,7 @@ const onCopy = (id) => {
   uni.setClipboardData({ data: id })
 }
 const getOrderList = async () => {
-  await getOrderDetailsWithBooksAPI(order_id.value).then((res) => {
+  await getOrderDetailsWithBooksAPI(parseInt(order_id.value)).then((res) => {
     orderList.value = res.result.orderDetailList
     order.value = res.result.order
   })
@@ -331,7 +331,7 @@ const onOrderPay = async () => {
   // 通过环境变量区分开发环境
   if (isDev) {
     // 开发环境：模拟支付，修改订单状态为待发货
-    await updateOrderAPI(order_id.value, '待发货')
+    await updateOrderAPI(parseInt(order_id.value), '待发货')
     order.value.order_status = '待发货'
   } else {
     // 生产环境：获取支付参数 + 发起微信支付
@@ -339,7 +339,7 @@ const onOrderPay = async () => {
     // await wx.requestPayment(res.result)
     // 实际应该做不同的操作 但是后端只做了假行为 所以一致
     // 开发环境：模拟支付，修改订单状态为待发货
-    await updateOrderAPI(order_id.value, '待发货')
+    await updateOrderAPI(parseInt(order_id.value), '待发货')
     order.value.order_status = '待发货'
   }
   // 关闭当前页，再跳转支付结果页
@@ -348,7 +348,7 @@ const onOrderPay = async () => {
 // 模拟发货
 const onOrderSend = async () => {
   if (isDev) {
-    await updateDaiShouHuoAPI(order_id.value, '待收货')
+    await updateDaiShouHuoAPI(parseInt(order_id.value), '待收货')
     uni.showToast({ icon: 'success', title: '模拟发货完成' })
     findLogisticsList()
     // 主动更新订单状态
@@ -356,7 +356,7 @@ const onOrderSend = async () => {
   }
   // 实际应该做不同的操作 但是后端只做了假行为 所以一致
   else {
-    await updateDaiShouHuoAPI(order_id.value, '待收货')
+    await updateDaiShouHuoAPI(parseInt(order_id.value), '待收货')
     uni.showToast({ icon: 'success', title: '模拟发货完成' })
     findLogisticsList()
     // 主动更新订单状态
@@ -371,7 +371,7 @@ const onOrderConfirm = () => {
       content: '为保障您的权益，请收到货并确认无误后，再确认收货',
       success: async (success) => {
         if (success.confirm) {
-          await updateDaiPingJiaAPI(order_id.value, '待评价')
+          await updateDaiPingJiaAPI(parseInt(order_id.value), '待评价')
           order.value.order_status = '待评价'
           findLogisticsList()
         }
@@ -385,23 +385,23 @@ const onOrderDete = () => {
     content: '确认删除订单',
     success: async (success) => {
       if (success.confirm) {
-        await deleteMemberOrderAPI(order_id.value)
-        uni.redirectTo({ url: '/pagesOrder/orderList/orderList' })
+        await deleteMemberOrderAPI(parseInt(order_id.value))
+        uni.redirectTo({ url: `/pagesOrder/orderList/orderList?type=${0}&status=${'全部'}` })
       }
     },
   })
 }
 
 const onCancelOrder = async () => {
-  await updateCancelReasonAPI(order_id.value, '已取消', reason.value)
-  uni.redirectTo({ url: '/pagesOrder/orderList/orderList' })
+  await updateCancelReasonAPI(parseInt(order_id.value), '已取消', reason.value)
+  uni.redirectTo({ url: `/pagesOrder/orderList/orderList?type=${0}&status=${'全部'}` })
 }
 onLoad(() => {
   getOrderList()
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   display: flex;
   flex-direction: column;
@@ -454,6 +454,7 @@ page {
   flex-direction: column;
   align-items: center;
   line-height: 1;
+  padding-top: 35px;
   padding-bottom: 30rpx;
   color: #fff;
   background-color: rgb(247, 75, 13, 0.6);
@@ -485,11 +486,10 @@ page {
     justify-content: center;
     align-items: center;
   }
-
   .button {
     width: 260rpx;
     height: 64rpx;
-    margin: 0 10rpx;
+    margin: 0 15rpx;
     text-align: center;
     line-height: 64rpx;
     font-size: 28rpx;
@@ -694,14 +694,14 @@ page {
     display: flex;
     justify-content: center;
     align-items: center;
-
+    background-color: #fff;
     width: 200rpx;
     height: 72rpx;
     margin-left: 15rpx;
     font-size: 26rpx;
     border-radius: 72rpx;
-    border: 1rpx solid #ccc;
-    color: #444;
+    color: orangered;
+    border: 1px solid orangered;
   }
   // 用order指定排序顺序
   .delete {
@@ -714,8 +714,6 @@ page {
 
   .secondary {
     order: 2;
-    color: orangered;
-    border-color: orangered;
   }
 
   .primary {

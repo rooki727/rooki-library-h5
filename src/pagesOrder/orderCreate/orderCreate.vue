@@ -149,13 +149,13 @@ const getOrderDetailsWithBooks = async () => {
   if (way.value === 'cart') {
     orderList.value = cartList.value
   } else if (way.value === 'book') {
-    const res = await getBookByIdAPI(book_id.value)
+    const res = await getBookByIdAPI(parseInt(book_id.value))
     const book = ref({})
     book.value = res.result
     book.value.detail_number = detail_number.value
     orderList.value[0] = book.value
   } else if (way.value === 'again') {
-    const res = await getOrderDetailsWithBooksAPI(order_id.value)
+    const res = await getOrderDetailsWithBooksAPI(parseInt(order_id.value))
     orderList.value = res.result.orderDetailList
   }
 }
@@ -260,7 +260,7 @@ onShow(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background-color: #f7f7f7;
   height: 100%;
@@ -403,6 +403,7 @@ page {
   box-sizing: content-box;
 
   .total-pay {
+    order: 1;
     font-size: 40rpx;
     color: orangered;
 
@@ -412,6 +413,7 @@ page {
   }
 
   .button {
+    order: 5;
     width: 220rpx;
     text-align: center;
     line-height: 72rpx;
@@ -419,6 +421,7 @@ page {
     color: #fff;
     border-radius: 72rpx;
     background-color: orangered;
+    margin-right: 15px;
   }
 
   .disabled {

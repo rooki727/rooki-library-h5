@@ -44,7 +44,7 @@ const onChoose = (item) => {
   </view>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .address-panel {
   padding: 0 30rpx;
   border-radius: 10rpx 10rpx 0 0;
@@ -109,18 +109,15 @@ const onChoose = (item) => {
 }
 
 .footer {
-  display: flex;
-  justify-content: space-between;
-  padding: 20rpx 0 40rpx;
+  width: 100%;
+  text-align: center;
   font-size: 28rpx;
   color: #444;
-
+  padding-bottom: 50px;
   .button {
-    flex: 1;
     height: 72rpx;
     text-align: center;
     line-height: 72rpx;
-    margin: 0 20rpx;
     color: #fff;
     border-radius: 72rpx;
   }

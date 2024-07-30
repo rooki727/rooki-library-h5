@@ -32,9 +32,12 @@ const bookList = computed(() => prop.bookList)
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0 10rpx;
+  .navigator-wrap {
+    width: 49%;
+  }
   .bookItem {
     background-color: white;
-    width: 49%;
+
     height: 200px;
     text-align: center;
     margin-bottom: 2%;

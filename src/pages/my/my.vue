@@ -1,6 +1,6 @@
 <template>
   <scroll-view :scroll-y="true" class="scroll" @scrolltolower="onScrolltolower" enable-back-to-top>
-    <view class="midContent" :style="{ paddingTop: navbarHeight + 'px' }">
+    <view class="midContent">
       <view class="isLogin" v-if="memberStore.profile">
         <navigator
           url="/pagesMember/profile/profile"
@@ -47,7 +47,7 @@
       <view class="orderTitle">
         <view class="myorder">我的订单</view>
         <navigator
-          :url="`/pagesOrder/orderList/orderList?type=${0}`"
+          :url="`/pagesOrder/orderList/orderList?type=${0}&status=${'全部'}`"
           open-type="navigate"
           hover-class="none"
           class="goToAllOrder"
@@ -59,13 +59,13 @@
         <navigator
           v-for="item in orderTitle"
           :key="item.type"
-          :url="`/pagesOrder/orderList/orderList?type=${item.type}`"
+          :url="`/pagesOrder/orderList/orderList?type=${item.type}&status=${item.name}`"
           open-type="navigate"
           hover-class="none"
         >
           <view class="orderVerify">
-            <view class="orderNumber" v-show="statusCountList[item.type]?.count > 0">{{
-              statusCountList[item.type]?.count
+            <view class="orderNumber" v-show="statusCountList[item?.type]?.count > 0">{{
+              statusCountList[item?.type]?.count
             }}</view>
             <uni-icons custom-prefix="iconfont" :type="item.icon" size="30"></uni-icons
             >{{ item.name }}
@@ -85,10 +85,7 @@ import GuessLike from '@/components/guessLike.vue'
 import { computed, ref } from 'vue'
 import { findCountStatusAPI } from '@/apis/order'
 import { onShow } from '@dcloudio/uni-app'
-//获取屏幕边界
-const { safeArea } = uni.getSystemInfoSync()
-//获取导航栏高度
-const navbarHeight = safeArea?.top + 20
+
 const memberStore = useMemberStore()
 const user_id = computed(() => memberStore.profile.user_id)
 
@@ -102,13 +99,21 @@ const orderTitle = [
   { type: 2, name: '待发货', icon: 'icon-daifahuo' },
   { type: 3, name: '待收货', icon: 'icon-daishouhuo' },
   { type: 4, name: '待评价', icon: 'icon-31daipingjia' },
-  { type: 5, name: '退款/售后', icon: 'icon-tuikuanshouhou' },
+  { type: 5, name: '已退款', icon: 'icon-tuikuanshouhou' },
 ]
-const statusCountList = ref([])
+const statusCountList = ref([
+  { status: '待付款', count: 0 },
+  { status: '待发货', count: 0 },
+  { status: '待收货', count: 0 },
+  { status: '待评价', count: 0 },
+  { status: '已退款', count: 0 },
+])
 // 创建一个新的数组，用于存储合并后的数据
 const findCountStatus = async () => {
   const res = await findCountStatusAPI(user_id.value)
-  statusCountList.value = res.result
+  if (res.code == '1') {
+    statusCountList.value = res.result
+  }
 }
 const awatar = computed(() => memberStore.profile?.awatar)
 onShow(() => {
@@ -116,7 +121,7 @@ onShow(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   height: 100%;
   display: flex;
@@ -128,6 +133,7 @@ page {
   height: 0;
 }
 .midContent {
+  padding-top: 55px;
   height: 10%;
   width: 100%;
   position: relative;
@@ -180,6 +186,8 @@ page {
 
 // 订单板块
 .orderFour {
+  padding-top: 10px;
+  margin-top: 3px;
   margin-left: 4%;
   height: 16%;
   width: 92%;
@@ -192,7 +200,7 @@ page {
     margin-bottom: 3%;
     .myorder {
       margin-left: 10px;
-      margin-top: 4%;
+      margin-top: 2%;
     }
     .goToAllOrder {
       margin-right: 10px;
@@ -200,6 +208,7 @@ page {
     }
   }
   .orderContent {
+    margin-top: 15px;
     display: flex;
     justify-content: space-evenly;
     .orderVerify {

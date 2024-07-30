@@ -246,7 +246,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
   background: linear-gradient(
     to bottom,
