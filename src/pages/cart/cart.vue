@@ -233,7 +233,6 @@ const getCartList = async () => {
   loading.value = false
   if (res.code != '-1') {
     cartList.value = res.result
-    console.log(cartList.value)
     const isSelectedAllComputed = computed(() => {
       return cartList.value.length && cartList.value.every((v) => v.isSelected === 1)
     })
@@ -253,7 +252,6 @@ const getAddressListById = async () => {
 // 加载更多
 const guessLikeRef = ref(null)
 const onScrolltolower = () => {
-  console.log(1)
   guessLikeRef.value.getMore()
 }
 
