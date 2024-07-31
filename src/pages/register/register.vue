@@ -20,6 +20,7 @@
         ]"
       >
         <uni-easyinput
+          class="inputItem"
           type="number"
           v-model="formData.account"
           placeholder="请输入账号"
@@ -44,6 +45,7 @@
         ]"
       >
         <uni-easyinput
+          class="inputItem"
           type="password"
           v-model="formData.password"
           placeholder="请输入密码"
@@ -56,6 +58,7 @@
         :rules="[{ required: true, errorMessage: '请确认密码' }]"
       >
         <uni-easyinput
+          class="inputItem"
           type="password"
           v-model="formData.confirmPassword"
           placeholder="请确认密码"
@@ -270,14 +273,11 @@ page {
   margin-top: 20%;
   text-align: center;
 }
-.uni-easyinput {
-  .uni-easyinput__content {
-    background: white;
-    height: 40px !important;
-    width: 70% !important;
-    margin: 0 auto;
-    border-radius: 10px;
-  }
+.inputItem {
+  background: white;
+  height: 40px !important;
+  width: 70% !important;
+  margin: 0 auto;
 }
 .submitBtn {
   width: 70%;

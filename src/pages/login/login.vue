@@ -10,6 +10,7 @@
         class="itemInput"
       >
         <uni-easyinput
+          class="inputItem"
           type="number"
           v-model="formData.account"
           placeholder="请输入账号"
@@ -23,6 +24,7 @@
         class="itemInput"
       >
         <uni-easyinput
+          class="inputItem"
           type="password"
           v-model="formData.password"
           placeholder="请输入密码"
@@ -42,14 +44,19 @@
       登录
     </button>
     <view style="margin-top: 4%">
-      <label @tap="onCheck">
-        <checkbox value="choose" :checked="formData.checked" style="transform: scale(0.7)" />
+      <view @tap="onCheck" class="checkboxView">
+        <checkbox
+          value="choose"
+          :checked="formData.checked"
+          style="transform: scale(0.7)"
+          @tap="onCheck"
+        />
         <text style="font-size: 12px"
           >已阅读并同意<text style="color: skyblue">服务协议</text> 和<text style="color: skyblue"
             >商城隐私保护指引</text
           >
         </text>
-      </label>
+      </view>
     </view>
   </view>
   <!-- 底部操作区 -->
@@ -106,13 +113,11 @@ const formData = ref({
 const onCheck = () => {
   formData.value.checked = !formData.value.checked
   canSubmit.value = !canSubmit.value
-  console.log(formData.value.checked, canSubmit.value)
 }
 const submitForm = () => {
   form.value
     .validate()
-    .then(async (res) => {
-      console.log('表单数据信息：', res)
+    .then(async () => {
       if (formData.value.checked) {
         await loginUserAPI(parseInt(formData.value.account), formData.value.password)
           .then(async (res) => {
@@ -186,16 +191,19 @@ page {
   margin-top: 20%;
   text-align: center;
 }
-
-.uni-easyinput {
-  .uni-easyinput__content {
-    background: white;
-    height: 40px !important;
-    width: 70% !important;
-    margin: 0 auto;
-    border-radius: 10px;
-  }
+.checkboxView {
+  margin: 0 auto;
+  text-align: center;
+  width: 70%;
 }
+
+.inputItem {
+  background: white;
+  height: 40px !important;
+  width: 70% !important;
+  margin: 0 auto;
+}
+
 .submitBtn {
   width: 70%;
   height: 40px;
