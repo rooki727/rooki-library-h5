@@ -45,7 +45,7 @@
         class="outLoginBtn"
         url="/pages/login/login"
         open-type="navigate"
-        hover-class="navigator-hover"
+        hover-class="none"
       >
         去登录
       </navigator>

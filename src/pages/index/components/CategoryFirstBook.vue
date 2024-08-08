@@ -4,7 +4,7 @@
     <navigator
       :url="`/pages/categoryLists/categoryLists?categoryFirstBook=${categoryFirstBook}`"
       open-type="navigate"
-      hover-class="navigator-hover"
+      hover-class="none"
     >
       <view class="categoryFirstBookMore"
         >全部<uni-icons type="right" size="14" color="rgb(110, 108, 108)"></uni-icons>
@@ -17,7 +17,7 @@
       <navigator
         :url="`/pages/book/book?book_id=${item.book_id}`"
         open-type="navigate"
-        hover-class="navigator-hover"
+        hover-class="none"
       >
         <view class="categoryBookItemDetail"
           ><image class="categoryBookItemDetailImg" :src="item.main_picture" mode="heightFix" />

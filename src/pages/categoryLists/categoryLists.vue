@@ -10,7 +10,7 @@
     <navigator
       :url="`/pages/book/book?book_id=${item.book_id}`"
       open-type="navigate"
-      hover-class="navigator-hover"
+      hover-class="none"
     >
       <view class="categoryBookItemDetail"
         ><image class="categoryBookItemDetailImg" :src="item.main_picture" mode="heightFix" />

@@ -2,10 +2,15 @@
   <!-- 自定义导航栏: 默认透明不可见, scroll-view 滚动到 50 时展示 -->
   <view class="navbar" :style="{ paddingTop: safeAreaInsetsTop + 'px' }">
     <view class="wrap">
-      <navigator v-if="pages.length > 1" open-type="navigateBack" class="back"
+      <navigator v-if="pages.length > 1" open-type="navigateBack" class="back" hover-class="none"
         ><uni-icons type="left" size="25"></uni-icons>
       </navigator>
-      <navigator v-else url="/pages/index/index" open-type="switchTab" class="back"
+      <navigator
+        v-else
+        url="/pages/index/index"
+        open-type="switchTab"
+        class="back"
+        hover-class="none"
         ><uni-icons type="left" size="25"></uni-icons>
       </navigator>
       <view class="title">订单详情</view>
