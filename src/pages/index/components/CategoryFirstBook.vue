@@ -38,7 +38,7 @@ const props = defineProps({
 const categoryFirstBook = computed(() => props.categoryFirstBook)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .categoryFirstBook {
   margin-top: 5px;
   width: 100%;

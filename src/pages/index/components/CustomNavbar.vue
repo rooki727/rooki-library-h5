@@ -26,7 +26,7 @@
   </view>
 </template>
 
-<script setup>
+<script setup scoped>
 import { ref, onMounted } from 'vue'
 import { getHomeRandomNameAPI } from '@/apis/home'
 //获取屏幕边界

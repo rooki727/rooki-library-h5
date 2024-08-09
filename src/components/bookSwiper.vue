@@ -24,7 +24,7 @@ const prop = defineProps({
 const bannerList = computed(() => prop.bannerList)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // 轮播图
 .carousel {
   height: 280rpx;

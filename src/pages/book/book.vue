@@ -182,30 +182,45 @@ const onClick = async (e) => {
       })
       break
     case '收藏':
-      if (isCollection.value) {
-        await deleteBookCollectAPI(user_id.value, book_id.value).then((res) => {
-          if (res.result) {
-            isCollection.value = false
-            uni.showToast({
-              title: '取消收藏',
-              icon: 'none',
-            })
-            options.value[1].icon = 'star'
-          }
+      if (!user_id.value) {
+        uni.showToast({
+          title: '请先登录',
+          icon: 'error',
+          duration: 500,
         })
+        setTimeout(() => {
+          uni.navigateTo({
+            url: '/pages/login/login',
+          })
+        }, 500)
+        return
       } else {
-        await addBookCollectAPI(user_id.value, book_id.value).then((res) => {
-          if (res.result) {
-            isCollection.value = true
-            options.value[1].icon = 'star-filled'
-            uni.showToast({
-              title: '收藏成功',
-              icon: 'success',
-            })
-          }
-        })
+        if (isCollection.value) {
+          await deleteBookCollectAPI(user_id.value, book_id.value).then((res) => {
+            if (res.result) {
+              isCollection.value = false
+              uni.showToast({
+                title: '取消收藏',
+                icon: 'none',
+              })
+              options.value[1].icon = 'star'
+            }
+          })
+        } else {
+          await addBookCollectAPI(user_id.value, book_id.value).then((res) => {
+            if (res.result) {
+              isCollection.value = true
+              options.value[1].icon = 'star-filled'
+              uni.showToast({
+                title: '收藏成功',
+                icon: 'success',
+              })
+            }
+          })
+        }
+        break
       }
-      break
+
     case '客服':
       uni.showToast({
         title: `点击${e.content.text}`,
@@ -463,8 +478,7 @@ page {
   /* #endif */
   bottom: 0;
 }
-
-.uni-icons {
+.uni-tab__icon {
   color: rgb(255, 94, 0) !important;
 }
 .uni-tab__text {

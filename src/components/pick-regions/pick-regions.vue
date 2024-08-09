@@ -137,7 +137,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .pick-regions {
   font-size: 16px;
   color: #828080;

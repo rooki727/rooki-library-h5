@@ -26,7 +26,7 @@ const prop = defineProps({
 const bookList = computed(() => prop.bookList)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .bookItemContent {
   display: flex;
   flex-wrap: wrap;

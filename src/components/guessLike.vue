@@ -48,7 +48,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // 猜你喜欢板块
 .guessTitle {
   font-size: 19px;

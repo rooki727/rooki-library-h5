@@ -75,11 +75,11 @@ const onGoToCategory = (category) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .categoryFourTitle {
   text-align: center;
   color: #e3521d;
-  margin-top: 15px;
+  margin-top: 5%;
   font-size: 20px;
   font-weight: 500;
 }

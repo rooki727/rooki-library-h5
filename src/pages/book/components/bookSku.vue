@@ -193,7 +193,7 @@ const onBtn = (name) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .bookSku {
   width: 100;
   height: 500px;
