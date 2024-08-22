@@ -73,6 +73,7 @@
     <view
       class="shipment"
       v-if="
+        order.order_status === '待发货' ||
         order.order_status === '待收货' ||
         order.order_status === '待评价' ||
         order.order_status === '已完成' ||
@@ -191,6 +192,7 @@
           class="button delete"
           v-if="
             order.order_status === '待评价' ||
+            order.order_status === '待评价' ||
             order.order_status === '已完成' ||
             order.order_status === '已退款' ||
             order.order_status === '已取消'
@@ -248,37 +250,7 @@ const query = defineProps({
 const order_id = computed(() => query.order_id)
 
 const pages = getCurrentPages()
-// // 获取当前页面实例，数组最后一项
-// const pageInstance = pages.at(-1)
-// // 页面渲染完毕，绑定动画效果
-// onReady(() => {
-//   // 动画效果,导航栏背景色
-//   pageInstance.animate(
-//     '.navbar', // 选择器
-//     [{ backgroundColor: 'transparent' }, { backgroundColor: '#f8f8f8' }], // 关键帧信息
-//     1000, // 动画持续时长
-//     {
-//       scrollSource: '#scroller', // scroll-view 的选择器
-//       startScrollOffset: 0, // 开始滚动偏移量
-//       endScrollOffset: 50, // 停止滚动偏移量
-//       timeRange: 1000, // 时间长度
-//     },
-//   )
-//   // 动画效果,导航栏标题
-//   pageInstance.animate('.navbar .title', [{ color: 'transparent' }, { color: '#000' }], 1000, {
-//     scrollSource: '#scroller',
-//     timeRange: 1000,
-//     startScrollOffset: 0,
-//     endScrollOffset: 50,
-//   })
-//   // 动画效果,导航栏返回按钮
-//   pageInstance.animate('.navbar .back', [{ color: '#fff' }, { color: '#000' }], 1000, {
-//     scrollSource: '#scroller',
-//     timeRange: 1000,
-//     startScrollOffset: 0,
-//     endScrollOffset: 50,
-//   })
-// })
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const safeAreaInsetsTop = safeAreaInsets.top
@@ -288,7 +260,7 @@ const order = ref({})
 const guessLikeRef = ref(null)
 const logisticList = ref([])
 const findLogisticsList = async () => {
-  await findLogisticsListAPI(order_id.value).then((res) => {
+  await findLogisticsListAPI(parseInt(order_id.value)).then((res) => {
     logisticList.value = res.result
   })
 }
@@ -338,6 +310,7 @@ const onOrderPay = async () => {
     // 开发环境：模拟支付，修改订单状态为待发货
     await updateOrderAPI(parseInt(order_id.value), '待发货')
     order.value.order_status = '待发货'
+    findLogisticsList()
   } else {
     // 生产环境：获取支付参数 + 发起微信支付
     // const res = await getPayWxPayMiniPayAPI({ orderId: query.id })
@@ -346,6 +319,7 @@ const onOrderPay = async () => {
     // 开发环境：模拟支付，修改订单状态为待发货
     await updateOrderAPI(parseInt(order_id.value), '待发货')
     order.value.order_status = '待发货'
+    findLogisticsList()
   }
   // 关闭当前页，再跳转支付结果页
   uni.redirectTo({ url: `/pagesOrder/orderPayment/orderPayment?order_id=${order_id.value}` })
@@ -403,6 +377,7 @@ const onCancelOrder = async () => {
 }
 onLoad(() => {
   getOrderList()
+  findLogisticsList()
 })
 </script>
 
