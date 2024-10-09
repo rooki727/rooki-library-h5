@@ -6,7 +6,7 @@
           url="/pagesMember/profile/profile"
           open-type="navigate"
           hover-class="none"
-          style="width: 50%"
+          style="width: 70%"
         >
           <view class="loginCard"
             ><image
@@ -14,7 +14,11 @@
               class="awatar"
               :src="awatar ? awatar : '../../static/images/OIP-C.jpg'"
             /><view class="midInfo">
-              <view>{{ memberStore.profile.name || memberStore.profile.account }}</view>
+              <view style="overflow: hidden">{{
+                memberStore.profile.name
+                  ? memberStore.profile.name
+                  : '账号' + memberStore.profile.account
+              }}</view>
               <view class="goProfile">点击修改信息</view>
             </view>
           </view>
@@ -159,7 +163,10 @@ page {
       font-size: 20px;
       margin-left: 10px;
       color: white;
+      max-width: 80%;
       .goProfile {
+        width: 80px;
+        text-align: center;
         border: 1px solid white;
         margin-top: 5px;
         font-size: 12px;

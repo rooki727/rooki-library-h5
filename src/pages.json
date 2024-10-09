@@ -70,6 +70,13 @@
 				"navigationBarTitleText": "分类榜单"
 			}
 		}
+    ,
+		{
+			"path": "pages/customer/customer",
+			"style": {
+				"navigationBarTitleText": "客服中心"
+			}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

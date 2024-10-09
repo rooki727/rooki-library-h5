@@ -37,25 +37,25 @@
       @click="submitForm"
       class="submitBtn"
       :style="{
-        backgroundColor: canSubmit ? 'rgb(110, 197, 232)' : 'skyblue',
-        color: canSubmit ? '#00000096' : 'white',
+        backgroundColor: canSubmit ? 'rgb(43, 179, 233)' : 'skyblue',
+        color: canSubmit ? 'white' : '#78767696',
       }"
     >
       登录
     </button>
     <view style="margin-top: 4%">
-      <view @tap="onCheck" class="checkboxView">
+      <view class="checkboxView">
         <checkbox
           value="choose"
           :checked="formData.checked"
           style="transform: scale(0.7)"
-          @tap="onCheck"
+          @click="onCheck"
         />
-        <text style="font-size: 12px"
+        <view style="font-size: 12px" @tap="onCheck"
           >已阅读并同意<text style="color: skyblue">服务协议</text> 和<text style="color: skyblue"
             >商城隐私保护指引</text
           >
-        </text>
+        </view>
       </view>
     </view>
   </view>
@@ -192,9 +192,9 @@ page {
   text-align: center;
 }
 .checkboxView {
-  margin: 0 auto;
-  text-align: center;
-  width: 70%;
+  display: flex;
+  align-items: center;
+  margin-left: 16%;
 }
 
 .inputItem {
@@ -221,7 +221,7 @@ page {
     text-align: center;
     .circle {
       text-align: center;
-      border: 1px solid #d6d3d3;
+      border: 1px solid #e8e3e3;
       width: 35px;
       height: 35px;
       line-height: 35px;

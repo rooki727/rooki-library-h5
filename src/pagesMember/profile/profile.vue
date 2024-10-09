@@ -9,9 +9,10 @@
     </view>
     <!-- 头像 -->
     <view class="awatar">
-      <view class="awatarContent" @tap="onTapAwatar">
+      <view class="awatarContent">
         <image :src="profileData.awatar" mode="aspectFill" class="awatarImg" />
-        <view class="awatarText">点击修改头像</view>
+
+        <view class="awatarText" @tap="onTapAwatar">点击修改头像</view>
       </view>
     </view>
     <!-- 表单 -->
@@ -117,10 +118,12 @@ import { computed, ref } from 'vue'
 import { getUserByIdAPI, updateUserBaseInfoAPI } from '@/apis/user'
 import { onLoad } from '@dcloudio/uni-app'
 import pickRegions from '@/components/pick-regions/pick-regions.vue'
+
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const memberStore = useMemberStore()
 const form = ref(null)
+
 // 设置选中器默认地址
 // const defaultRegion = ['广东省', '广州市', '番禺区']
 const defaultRegionCode = '440113'
@@ -156,41 +159,88 @@ const handleGetRegion = (val) => {
   loactionList.value = val
   profileData.value.address = loactionList.value.map((item) => item.name).join(' ')
 }
+// 小程序 app使用
+// const onTapAwatar = async () => {
+//   // / 调用拍照/选择图片
+//   uni.chooseMedia({
+//     // 文件个数
+//     count: 1,
+//     // 文件类型
+//     mediaType: ['image'],
+//     success: async (res) => {
+//       // 本地路径
+
+//       const { tempFilePath } = res.tempFiles[0]
+//       console.log(res)
+//       console.log(tempFilePath)
+//       // 文件上传 传给后端返回可公网访问的链接
+//       uni.uploadFile({
+//         url: '/file/uploadPicture', // [!code ++]
+//         name: 'image', // 后端数据字段名  // [!code ++]
+//         filePath: tempFilePath, // 新头像  // [!code ++]
+//         success: (res) => {
+//           // 判断状态码是否上传成功
+//           if (res.statusCode === 200) {
+//             // 提取头像
+//             const awatar = JSON.parse(res.data).result
+//             // 当前页面更新头像
+//             profileData.value.awatar = awatar // [!code ++]
+
+//             uni.showToast({ icon: 'success', title: '更新成功' })
+//           } else {
+//             uni.showToast({ icon: 'error', title: '出现错误' })
+//           }
+//         },
+//       })
+//     },
+//   })
+// }
+
+// h5使用
 const onTapAwatar = async () => {
-  // / 调用拍照/选择图片
-  uni.chooseMedia({
-    // 文件个数
-    count: 1,
-    // 文件类型
-    mediaType: ['image'],
-    success: async (res) => {
-      // 本地路径
-
-      const { tempFilePath } = res.tempFiles[0]
-      console.log(res)
-      console.log(tempFilePath)
-      // 文件上传 传给后端返回可公网访问的链接
-      uni.uploadFile({
-        url: '/file/uploadBookMainPicture', // [!code ++]
-        name: 'image', // 后端数据字段名  // [!code ++]
-        filePath: tempFilePath, // 新头像  // [!code ++]
-        success: (res) => {
-          // 判断状态码是否上传成功
-          if (res.statusCode === 200) {
-            // 提取头像
-            const awatar = JSON.parse(res.data).result
-            // 当前页面更新头像
-            profileData.value.awatar = awatar // [!code ++]
-
-            uni.showToast({ icon: 'success', title: '更新成功' })
-          } else {
-            uni.showToast({ icon: 'error', title: '出现错误' })
-          }
-        },
-      })
+  uni.chooseImage({
+    count: 1, // 默认选择1张图片
+    success: (res) => {
+      const tempFilePaths = res.tempFilePaths
+      if (tempFilePaths.length > 0) {
+        // 获取选择的图片路径
+        const tempFilePath = tempFilePaths[0]
+        // 调用上传图片接口
+        uploadImage(tempFilePath)
+      }
+    },
+    fail: (err) => {
+      console.error('选择图片失败:', err)
     },
   })
 }
+
+const uploadImage = (filePath) => {
+  uni.uploadFile({
+    url: '/file/uploadPicture', // 替换为你的上传接口
+    filePath: filePath,
+    name: 'image', // 后端接收文件的字段名
+    success: (res) => {
+      if (res.statusCode === 200) {
+        const data = JSON.parse(res.data)
+        // 处理上传成功后的数据
+        const avatarUrl = data.result
+
+        // 你可以在这里更新页面或显示图片
+        profileData.value.awatar = avatarUrl
+        uni.showToast({ icon: 'success', title: '更新成功' })
+      } else {
+        uni.showToast({ icon: 'error', title: '上传失败' })
+      }
+    },
+    fail: (err) => {
+      console.error('上传失败:', err)
+      uni.showToast({ icon: 'error', title: '上传失败' })
+    },
+  })
+}
+
+// 提交表单
 const submitForm = async () => {
   form.value.validate().then(async (res) => {
     console.log('表单数据信息：', res)

@@ -98,21 +98,26 @@
       @click="submitForm"
       class="submitBtn"
       :style="{
-        backgroundColor: canSubmit ? 'rgb(110, 197, 232)' : 'skyblue',
-        color: canSubmit ? '#00000096' : 'white',
+        backgroundColor: canSubmit ? 'rgb(43, 179, 233)' : 'skyblue',
+        color: canSubmit ? 'white' : '#78767696',
       }"
     >
       注册
     </button>
     <view style="margin-top: 4%">
-      <label @tap="onCheck">
-        <checkbox value="choose" :checked="formData.checked" style="transform: scale(0.7)" />
-        <text style="font-size: 12px"
+      <view class="checkboxView">
+        <checkbox
+          value="choose"
+          :checked="formData.checked"
+          style="transform: scale(0.7)"
+          @click="onCheck"
+        />
+        <view style="font-size: 12px" @tap="onCheck"
           >已阅读并同意<text style="color: skyblue">服务协议</text> 和<text style="color: skyblue"
             >商城隐私保护指引</text
           >
-        </text>
-      </label>
+        </view>
+      </view>
     </view>
   </view>
   <!-- 底部操作区 -->
@@ -307,6 +312,11 @@ page {
     }
   }
 }
+.checkboxView {
+  display: flex;
+  align-items: center;
+  margin-left: 16%;
+}
 .checkedCaptcha {
   margin-left: 20%;
   display: flex;
@@ -318,7 +328,7 @@ page {
     justify-content: center;
     width: 40%;
     height: 40px;
-    border: 1px solid #d6d3d3;
+    border: 1px solid #e8e3e3;
     font-size: 15px;
     border-radius: 10px;
     .captchaChar {
