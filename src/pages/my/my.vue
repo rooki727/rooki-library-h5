@@ -114,6 +114,10 @@ const statusCountList = ref([
 ])
 // 创建一个新的数组，用于存储合并后的数据
 const findCountStatus = async () => {
+  if (!user_id.value) {
+    statusCountList.value = []
+    return
+  }
   const res = await findCountStatusAPI(user_id.value)
   if (res.code == '1') {
     statusCountList.value = res.result
