@@ -15,4 +15,5 @@ export default {
 <style>
 /*每个页面公共css */
 @import '/src/static/iconfont.css';
+@import '/src/style/base-h5.css';
 </style>

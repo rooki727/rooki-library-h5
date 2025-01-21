@@ -189,5 +189,7 @@
 				}
 			]
 		}
-	]
+	],
+
+  "lazyCodeLoading": "requiredComponents"
 }

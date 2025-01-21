@@ -478,6 +478,7 @@ page {
 
 // 底部操作
 .goods-carts {
+  width: 100%;
   /* #ifndef APP-NVUE */
   display: flex;
   /* #endif */
@@ -485,6 +486,7 @@ page {
   position: fixed;
   left: 0;
   right: 0;
+  margin: 0 auto;
   /* #ifdef H5 */
   left: var(--window-left);
   right: var(--window-right);

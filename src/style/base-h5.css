@@ -1,0 +1,24 @@
+@media screen and (min-width: 800px) {
+  html, body {
+    width: 340px;
+    height: 844px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+   .uni-tabbar-bottom{
+    width: 340px;
+   }
+  /* 强制设置tabbar尺寸 */
+  .uni-tabbar {
+    width: 340px;
+    position: absolute;
+    bottom: 0;
+    margin: 0 auto;
+  }
+  .toolbar{
+    width: 340px !important;
+    position: absolute;
+    bottom: 0;
+    margin: 0 auto;
+  }
+}
